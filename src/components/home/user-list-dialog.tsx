@@ -21,7 +21,7 @@ import { api } from "../../../convex/_generated/api";
 const UserListDialog = () => {
   const [selectedUsers, setSelectedUsers] = useState<Id<"users">[]>([]);
   const [groupName, setGroupName] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [renderedImage, setRenderedImage] = useState("");
   
@@ -75,15 +75,13 @@ const UserListDialog = () => {
 		  <DialogClose ref={dialogCloseRef} />
           <DialogTitle>USERS</DialogTitle>
         </DialogHeader>
-
         <DialogDescription>Start a new chat</DialogDescription>
         {renderedImage && (
           <div className="w-16 h-16 relative mx-auto">
             <Image
               src={renderedImage}
-              fill
-              alt="user image"
-              className="rounded-full object-cover"
+              fill alt='user image'
+              className='rounded-full object-cover'
             />
           </div>
         )}
@@ -118,7 +116,7 @@ const UserListDialog = () => {
               key={user._id}
               className={`flex gap-3 items-center p-2 rounded cursor-pointer active:scale-95 
 								transition-all ease-in-out duration-300
-							${selectedUsers.includes(user._id) ? "bg-green-primary" : ""}`}
+							  ${selectedUsers.includes(user._id) ? "bg-green-primary" : ""}`}
               onClick={() => {
                 if (selectedUsers.includes(user._id)) {
                   setSelectedUsers(

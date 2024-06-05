@@ -24,7 +24,7 @@ export const updateUser = internalMutation({
         tokenIdentifier: v.string(),
         image: v.string(),
     },
-    handler: async (ctx, args) => {
+    async handler (ctx, args) {
         const user = await ctx.db
         .query("users")
         .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", args.tokenIdentifier))
@@ -34,7 +34,9 @@ export const updateUser = internalMutation({
             throw new ConvexError("Usuario no encontrado");
         }
 
-        await ctx.db.patch(user._id, {image: args.image});
+        await ctx.db.patch(user._id, {
+            image: args.image,
+        });
     },
 });
 
@@ -52,7 +54,7 @@ export const setUserOnline = internalMutation({
             throw new ConvexError("Usuario no encontrado");
         }
 
-        await ctx.db.patch(user._id, {isOnline: true});
+        await ctx.db.patch(user._id, { isOnline: true });
     },
 });
 
@@ -70,7 +72,7 @@ export const setUserOffline = internalMutation({
             throw new ConvexError("Usuario no encontrado");
         }
 
-        await ctx.db.patch(user._id, {isOnline: false});
+        await ctx.db.patch(user._id, { isOnline: false });
     },
 });
 
@@ -84,8 +86,8 @@ export const getUsers = query({
             throw new ConvexError("Usuario no autorizado");
         }
 
-        const user = await ctx.db.query("users").collect();
-        return user;
+        const users = await ctx.db.query("users").collect();
+        return users;
     },
 });
 
@@ -101,13 +103,12 @@ export const getMe = query({
         .query("users")
         .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
         .unique();
-
-        if (!user) {
-            throw new ConvexError("Usuario no encontrado");
-        }
-
-        return user;
-},
+    
+       if(!user) {
+        throw new ConvexError("Usuario no encontrado");
+    }
+    return user;
+}
 });
 
-//Pendiente agregar getGroupMembers ---luego
+//Pendiente agregar getGroupMembers query ---luego
