@@ -77,9 +77,7 @@ export const setUserOffline = internalMutation({
 });
 
 export const getUsers = query({
-    args: {
-        tokenIdentifier: v.string()
-    },
+    args: {},
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
         if(!identity) {

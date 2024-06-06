@@ -17,6 +17,7 @@ export default defineSchema({
     groupImage: v.optional(v.string()),
     admin: v.optional(v.id("users")),
   }),
+  
   messages: defineTable({
     conversation: v.id("conversations"),
     sender: v.string(), // should be string so that it doesn't throw errors in openai part ("ChatGPT")

@@ -5,9 +5,11 @@ import { conversations } from "@/dummy-data/db";
 import Conversation from "./conversation";
 import { UserButton } from "@clerk/nextjs";
 import UserListDialog from "./user-list-dialog";
+import { useConvexAuth } from "convex/react";
 
 
 const LeftPanel = () => {
+	const {isAuthenticated} = useConvexAuth();
 
 	return (
 		<div className='w-1/4 border-gray-600 border-r'>
@@ -16,7 +18,7 @@ const LeftPanel = () => {
 				<div className='flex justify-between bg-gray-primary p-3 items-center'>
 					<UserButton/>
 					<div className='flex items-center gap-3'>
-						<UserListDialog />
+						{isAuthenticated && <UserListDialog />}
 						<ThemeSwitch />
 					</div>
 				</div>

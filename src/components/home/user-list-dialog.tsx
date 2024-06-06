@@ -17,6 +17,7 @@ import { ImageIcon, MessageSquareDiff } from "lucide-react";
 import { Id } from "../../../convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import toast from "react-hot-toast";
 
 const UserListDialog = () => {
   const [selectedUsers, setSelectedUsers] = useState<Id<"users">[]>([]);
@@ -29,8 +30,9 @@ const UserListDialog = () => {
   const dialogCloseRef = useRef<HTMLButtonElement>(null);
 
   const createConversation = useMutation(api.conversations.createConversation);
-  const me = useQuery(api.users.getMe, "skip");
-  const users = useQuery(api.users.getUsers, "skip");
+  const generateUploadUrl = useMutation(api.conversations.generateUploadUrl);
+  const me = useQuery(api.users.getMe);
+  const users = useQuery(api.users.getUsers);
 
   const handleCreateConversation = async () => {
     if (selectedUsers.length === 0) return;
@@ -45,12 +47,32 @@ const UserListDialog = () => {
           isGroup: false,
         });
       } else {
+          const postUrl = await generateUploadUrl();
+
+          const result = await fetch(postUrl, {
+            method: "POST",
+            headers: {"content-type":selectedImage?.type!},
+            body: selectedImage,
+          })
+
+          const{storageId} = await result.json();
+
+          await createConversation({
+            participantes:[...selectedUsers, me?._id!],
+            isGroup: true,
+            admin:me?._id!,
+            groupName,
+            groupImage: storageId,
+          })
       }
-	  setSelectedUsers([]);
-	  dialogCloseRef.current?.click();
+    dialogCloseRef.current?.click();
+    setSelectedUsers([]);
+	  setGroupName("");
+    setSelectedImage(null);
 
-
+      //PENDIENTE => ACTUALIZAR EL STADO GLOBAL LLAMADO "selectedConversationId"
     } catch (err) {
+      toast.error("Error al crear la conversacion");
       console.error(err);
     } finally {
       setIsLoading(false);
