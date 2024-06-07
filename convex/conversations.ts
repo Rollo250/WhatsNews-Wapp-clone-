@@ -1,5 +1,5 @@
 import { ConvexError, v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const createConversation = mutation({
   args: {
@@ -44,6 +44,57 @@ export const createConversation = mutation({
     return conversationId;
   },
 });
+
+export const getMyConversations = query({
+  args: {},
+  handler: async (ctx,arg) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new ConvexError("No autorizado");
+
+    const user = await ctx.db
+    .query("users")
+    .withIndex("by_tokenIdentifier",(q: any) => q.eq("tokenIdentifier",identity.tokenIdentifier))
+    .unique();
+
+    if(!user) throw new ConvexError("Usuario no encontrado");
+
+    const conversations = await ctx.db.query("conversations").collect();
+
+    const myConversations = conversations.filter((conversation: any) => {
+      return conversation.participantes.includes(user._id);
+    });
+
+    const conversationWithDetails = await Promise.all(myConversations.map(async (conversation: any) => {
+      let userDetails ={};
+
+      if(!conversation.isGroup){
+        const otherUserId = conversation.participantes.find((id: any) => id !== user._id);
+        const userProfile = await ctx.db
+        .query("users")
+        .filter(q => q.eq(q.field("_id"), otherUserId))
+        .take(1);
+        
+        userDetails = userProfile[0];
+      }
+
+      const lastMessage = await ctx.db
+      .query("messages")
+      .filter((q: any) => q.eq(q.field("conversation"), conversation._id))
+      .order ("desc")
+      .take(1)
+
+      //El return tiene que ser en este orden, de otra forma el campo _id va a ser sobreescrito.
+      return {
+        ...userDetails,
+        ...conversation,
+        lastMessage: lastMessage[0] || null,
+      }
+    })
+  )
+
+    return conversationWithDetails;
+  },
+})
 
 export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl()
