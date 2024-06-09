@@ -19,6 +19,7 @@ const MessageInput = () => {
 	 const {ref,isComponentVisible,setIsComponentVisible} = useComponentVisible(false);
 
 	const handleSendTextMsg = async (e: React.FormEvent) => {e.preventDefault();
+		
 		try {
 			await sendTextMsg({content: msgText, conversation: selectedConversation!._id, sender: me!._id});
 			setMsgText('');
