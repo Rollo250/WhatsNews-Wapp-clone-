@@ -12,6 +12,7 @@ type ChatBubbleProps = {
   message: IMessage;
   me: any;
   previousMessage?: IMessage;
+  deleted?: boolean;
 };
 
 const ChatBubble = ({ me, message, previousMessage }: ChatBubbleProps) => {
@@ -26,20 +27,24 @@ const ChatBubble = ({ me, message, previousMessage }: ChatBubbleProps) => {
   const isGroup = selectedConversation?.isGroup;
   const fromMe = message.sender._id === me._id;
   const bgClass = fromMe ? "bg-green-chat" : "bg-white dark:bg-gray-primary";
-
+  const [deleted, setDeleted] = useState(false);//verifica si el mensaje ha sido eliminado
   const [open,setOpen] = useState(false);
 
   const renderMessageContent = () => {
+    if (deleted) {
+      return <p className="text-sm font-light text-gray-400">mensaje eliminado</p>;
+    }
+  
     switch (message.messageType) {
       case "text":
-        return <TextMessage message={message} />;
+        return <TextMessage message={message} deleted={deleted}/>;
       case "image":
         return <ImageMessage message={message} handleClick={() => setOpen(true)} />;
       case "video":
         return <VideoMessage message={message} />;
       default:
         return null;
-    } 
+    }
   };
 
   if (!fromMe) {
@@ -64,21 +69,28 @@ const ChatBubble = ({ me, message, previousMessage }: ChatBubbleProps) => {
         </div>
       </>
     );
-  }
-  
-  return (
-    <>
-    <DateIndicator message={message} previousMessage={previousMessage} />
-      <div className="flex gap-1 w-2/3 ml-auto">
-        <div className={`flex z-20 max-w-fit px-2 pt-1 rounded-md shadow-md ml-auto relative ${bgClass}`}>
-          <SelfMessageIndicator />
-          {renderMessageContent()}
-          { open && <ImageDialog src={message.content} open={open} onClose={() => setOpen(false)} />}
+  } else {
+    return (
+      <>
+        <DateIndicator message={message} previousMessage={previousMessage} />
+        <div className="flex gap-1 w-2/3 ml-auto">
+          <div className={`flex z-20 max-w-fit px-2 pt-1 rounded-md shadow-md ml-auto relative ${bgClass}`}>
+            {renderMessageContent()}
+            {open && <ImageDialog src={message.content} open={open} onClose={() => setOpen(false)} />}
             <MessageTime time={time} fromMe={fromMe} />
+            {fromMe && (
+              <button
+                className="absolute -top-2 left-0 p-0.1 m-0.1 text-white scale-50 xl:text-lg"
+                onClick={() => setDeleted(true)}
+              >
+                X
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 };
 
 export default ChatBubble;
@@ -135,8 +147,12 @@ const SelfMessageIndicator = () => (
   <div className="absolute bg-green-chat top-0 -right-[3px] w-3 h-3 rounded-br-full overflow-hidden" />
 );
 
-const TextMessage = ({ message }: { message: IMessage }) => {
-	const isLink = /^(ftp|http|https):\/\/[^ "]+$|^(www\.)[^ "]+$/.test(message.content); //chequea si el contenido es una URL
+const TextMessage = ({ message, deleted }: { message: IMessage; deleted: boolean }) => {
+  const isLink = /^(ftp|http|https):\/\/[^ "]+$|^(www\.)[^ "]+$/.test(message.content);
+
+  if (deleted) {
+    return <p className="text-sm font-light text-gray-400">Mensaje eliminado</p>;
+  }
 
   return (
     <div>

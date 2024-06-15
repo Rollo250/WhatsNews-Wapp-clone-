@@ -1,4 +1,4 @@
-import { Laugh, Mic, Plus, Send } from "lucide-react";
+import { Laugh, Mic, Plus, Send, SendHorizonal } from "lucide-react";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -19,17 +19,21 @@ const MessageInput = () => {
 
 	 const {ref,isComponentVisible,setIsComponentVisible} = useComponentVisible(false);
 
-	const handleSendTextMsg = async (e: React.FormEvent) => {e.preventDefault();
-		
-		try {
-			await sendTextMsg({content: msgText, conversation: selectedConversation!._id, sender: me!._id});
-			setMsgText('');
-	
-	}catch (err: any) {
-		toast.error(err.message);
-		console.error(err);
+	 const handleSendTextMsg = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (msgText.trim() !== '') {
+			try {
+				await sendTextMsg({ content: msgText, conversation: selectedConversation!._id, sender: me!._id });
+				setMsgText('');
+			} catch (err: any) {
+				toast.error(err.message);
+				console.error(err);
+			}
+		} else {
+			toast.error('El mensaje no puede estar vacío');
+		}
 	}
-}
+
 
 	return (
 		<div className='bg-gray-primary p-2 flex gap-4 items-center'>
@@ -73,7 +77,7 @@ const MessageInput = () => {
 							size={"sm"}
 							className='bg-transparent text-foreground hover:bg-transparent'
 						>
-							<Mic />
+							<SendHorizonal />
 						</Button>
 					)}
 				</div>

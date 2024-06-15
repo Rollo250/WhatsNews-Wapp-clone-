@@ -12,6 +12,13 @@ const MessageContainer = () => {
 	const me = useQuery(api.users.getMe);
 	console.log(messages);
 	const lastMessageRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		setTimeout(() => {
+			lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, 100);
+	}, [messages]);
+
 	return (
 		<div className='relative p-3 flex-1 overflow-auto h-full bg-chat-tile-light dark:bg-chat-tile-dark'>
 			<div className='mx-12 flex flex-col gap-3 h-full'>

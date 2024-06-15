@@ -19,16 +19,17 @@ const ChatAvatarActions = ({ me, message }: ChatAvatarActionsProps) => {
   const handlequitarUser = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!selectedConversation) return;
+    const prevConversation = selectedConversation; // Guarda el valor actual de selectedConversation
     try {
       await quitarUser({
         conversationId: selectedConversation._id,
         userId: message.sender._id,
       });
-
-      setSelectedConversation((prevConversation) => ({
+  
+      setSelectedConversation({
         ...prevConversation,
-        participantes: prevConversation.participantes.filter((id) => id !== message.sender._id),
-      }));
+        participantes: prevConversation.participantes.filter((id: any) => id.toString() !== message.sender._id.toString()),
+      });
     } catch (error) {
       toast.error("No se pudo quitar al usuario");
     }

@@ -69,7 +69,7 @@ const LeftPanel = () => {
 					<>
 						<p className='text-center text-gray-500 text-sm mt-3'>Todavía no charlaste con nadie</p>
 						<p className='text-center text-gray-500 text-sm mt-3 '>
-							Entendemos {"sos"} tímido, pero {"tenés"} que arrancar por algún lado 😊
+							Entendemos, {"sos"} tímido, pero {"tenés"} que arrancar por algún lado 😊
 						</p>
 					</>
 				)}
