@@ -94,7 +94,29 @@ export const getMyConversations = query({
 
     return conversationWithDetails;
   },
-})
+});
+
+export const quitarUser = mutation({
+  args: {
+    conversationId: v.id("conversations"),
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new ConvexError("No autorizado");
+
+    const conversation = await ctx.db
+      .query("conversations")
+      .filter((q) => q.eq(q.field("_id"), args.conversationId))
+      .first();
+
+      if(!conversation) throw new ConvexError("conversación no encontrada")
+
+        await ctx.db.patch(args.conversationId, {
+          participantes: conversation.participantes.filter((id) => id !== args.userId),
+        });
+  },
+});
 
 export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl()
