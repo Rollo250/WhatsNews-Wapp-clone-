@@ -33,7 +33,6 @@ const LeftPanel = () => {
 					<UserButton />
 					<div className='flex items-center gap-3'>
 						{isAuthenticated && <UserListDialog />}
-						<PanelLeftClose />
 						<ThemeSwitch />
 					</div>
 				</div>

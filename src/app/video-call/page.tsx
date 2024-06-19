@@ -1,6 +1,6 @@
 "use client";
 import VideoChat from '@/components/video-component/video-chat';
-import { X, Play, Pause, Video, VideoIcon } from 'lucide-react';
+import { X, Play, Pause, Video, VideoIcon, SatelliteDish } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 const VideoComponent = () => {
@@ -38,7 +38,7 @@ const VideoComponent = () => {
             </div>
           </div>
           <div className='flex items-center gap-7 mr-5'>
-            <Video size={16} className='cursor-pointer'/>
+            <SatelliteDish size={16} className='cursor-pointer'/>
             <X size={16} className='cursor-pointer' onClick={handleXClick} />
           </div>
         </div>
