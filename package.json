@@ -29,7 +29,11 @@
     "svix": "^1.24.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "@clerk/clerk-sdk-node": "^5.0.9",
+    "@livekit/components-react": "^2.3.3",
+    "@livekit/components-styles": "^1.0.12",
+    "livekit-server-sdk": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
