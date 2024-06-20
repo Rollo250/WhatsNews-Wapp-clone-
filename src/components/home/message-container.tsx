@@ -15,28 +15,9 @@ const MessageContainer = () => {
 	const lastMessageRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const handleNewMessage = () => {
-			const audio = new Audio('../lib/audio/store-door-chime.mp3');
-			audio.play();
-		};
-
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					handleNewMessage();
-				}
-			});
-		});
-
-		if (lastMessageRef.current) {
-			observer.observe(lastMessageRef.current);
-		}
-
-		return () => {
-			if (lastMessageRef.current) {
-				observer.unobserve(lastMessageRef.current);
-			}
-		};
+		setTimeout(() => {
+			lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, 100);
 	}, [messages]);
 
 	return (
