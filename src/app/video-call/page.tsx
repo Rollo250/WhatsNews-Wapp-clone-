@@ -32,9 +32,8 @@ const VideoComponent = () => {
         {/* Header */}
         <div className='flex justify-between bg-gray-primary p-3'>
           <div className='flex gap-3 items-center'>
-            <div className='animate-pulse bg-gray-tertiary w-full h-full rounded-full' />
             <div className='flex flex-col'>
-              <p>marcador</p>
+              <p>En llamada...</p>
             </div>
           </div>
           <div className='flex items-center gap-7 mr-5'>
