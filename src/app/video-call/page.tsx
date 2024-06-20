@@ -55,3 +55,4 @@ export default VideoComponent;
 
 //Pendiente WebRTC api y WebTransport
 //  cd whatsnews
+//¿Cómo edito el código para que en el left-panel los mensaje sin leer tuvieran una message-circle-warning de lucide al tener mensajes nuevos sin leer?

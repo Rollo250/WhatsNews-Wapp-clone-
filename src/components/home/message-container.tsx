@@ -5,6 +5,7 @@ import { useConversationStore } from "@/store/chat-store";
 import { useEffect, useRef } from "react";
 
 
+
 const MessageContainer = () => {
 	const { selectedConversation } = useConversationStore();
 	const messages = useQuery(api.messages.getMessages, {
@@ -15,7 +16,7 @@ const MessageContainer = () => {
 
 	useEffect(() => {
 		const handleNewMessage = () => {
-			const audio = new Audio("/lib/audio/store-door-chime.mp3");
+			const audio = new Audio('../lib/audio/store-door-chime.mp3');
 			audio.play();
 		};
 
