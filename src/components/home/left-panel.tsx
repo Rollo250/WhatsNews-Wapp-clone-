@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { useConversationStore } from "@/store/chat-store";
 
 const LeftPanel = () => {
-	const [hayMensajesNoLeidos, setHayMensajesNoLeidos] = useState(false);
   const { isAuthenticated, isLoading } = useConvexAuth();
   const conversations = useQuery(
     api.conversations.getMyConversations,
@@ -70,9 +69,6 @@ const LeftPanel = () => {
         {/*// En el componente LeftPanel, donde quieres mostrar el círculo de
         advertencia*/}
         <div className="flex items-center gap-3">
-          {/* Aquí se muestra el círculo de advertencia si hay mensajes no leídos */}
-          {hayMensajesNoLeidos && <MessageCircleWarning size={16} />}
-          {/* Resto del contenido del LeftPanel */}
         </div>
         {conversations?.map((conversation: any) => (
           <Conversation key={conversation._id} conversation={conversation} />

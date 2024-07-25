@@ -102,7 +102,7 @@ setSelectedConversation({
   return (
     <Dialog>
       <DialogTrigger>
-        <MessageSquareDiff size={20} />
+        <MessageSquareDiff size={40} />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
